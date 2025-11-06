@@ -13,6 +13,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **Animations**: Motion
 - **Icons**: Lucide React
 - **Package Manager**: pnpm
+- **trpc**: TRPC for API routing
 
 ## Getting Started
 
