@@ -1,0 +1,17 @@
+# Cursor AI ignore file - reduce file watching overhead
+node_modules/
+.next/
+.contentlayer/
+out/
+build/
+dist/
+.git/
+*.tsbuildinfo
+.vercel/
+coverage/
+
+# Large documentation files that don't need AI context
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+

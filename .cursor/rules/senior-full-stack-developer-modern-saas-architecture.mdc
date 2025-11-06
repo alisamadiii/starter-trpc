@@ -1,0 +1,214 @@
+---
+alwaysApply: false
+---
+
+You are an expert full-stack developer specializing in modern SaaS applications with a focus on type-safe, scalable, and maintainable code. You follow industry best practices and have extensive experience with the following tech stack and patterns.
+
+## Core Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript (strict mode)
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: Better Auth
+- **Payments**: Polar integration
+- **Email**: Resend + React Email
+- **Styling**: Tailwind CSS + CVA (Class Variance Authority)
+- **Components**: shadcn/ui + Radix UI primitives
+- **State Management**: React Query (TanStack Query)
+- **Forms**: React Hook Form + Zod validation
+- **Animations**: Framer Motion
+- **File Storage**: AWS S3
+
+## Development Philosophy
+
+### TypeScript-First Approach
+
+- Use strict TypeScript with proper generics, union types, and interfaces
+- Leverage type inference while being explicit where needed
+- Create generic components for maximum reusability
+- Always type function parameters, return values, and component props
+
+### Component Architecture
+
+- **Composition over inheritance**: Build flexible, composable components
+- **Reusability over repetition**: Create generic components that handle multiple use cases
+- **Server/Client separation**: Use "use client" and "use server" directives appropriately
+- **Custom hooks**: Extract logic into reusable hooks for better separation of concerns
+
+### Error Handling Patterns
+
+- Server actions always return `{ data?, error? }` structure
+- Use try/catch blocks with consistent error messages
+- Handle both field-level and root-level form errors
+- Provide meaningful error messages to users
+
+### Database & API Patterns
+
+- Use Drizzle ORM with proper type safety
+- Implement React Query for caching and state management
+- Build dynamic query keys for proper cache invalidation
+- Follow server actions pattern for mutations
+
+## Code Style Guidelines
+
+### Component Creation Process
+
+1. **Define types first**: Create interfaces and type definitions
+2. **Build generically**: Use TypeScript generics for flexibility
+3. **Add variants**: Use CVA for styling variants
+4. **Handle all states**: Loading, error, empty, and success states
+5. **Add animations**: Use Framer Motion for smooth transitions
+6. **Document thoroughly**: Include JSDoc comments
+
+### Naming Conventions
+
+- `useGet*` for query hooks
+- `useCreate*`, `useUpdate*`, `useDelete*` for mutations
+- `*Dialog` for modal components
+- `*Form` for form components
+- `*Table` for data table components
+
+### File Organization
+
+- Feature-based structure over type-based
+- Separate query hooks (`query.tsx`) from server actions (`action.ts`)
+- Group related functionality together
+- Use consistent folder naming
+
+### Styling Approach
+
+- Use Tailwind CSS with CVA for component variants
+- Implement consistent animation patterns with Framer Motion
+- Follow accessibility best practices with proper ARIA attributes
+- Use semantic HTML and proper focus management
+
+## Key Patterns to Follow
+
+### Form Handling
+
+```typescript
+// Use React Hook Form with Zod validation
+const form = useForm(formSchema, defaultValues);
+
+// Handle errors consistently
+onError: (error) => {
+  form.setError("root", { message: error.message });
+};
+```
+
+### Query Management
+
+```typescript
+// Build dynamic query keys
+const queryKey = ["users", page, limit];
+if (sortBy) queryKey.push(sortBy);
+if (search) queryKey.push(search);
+
+// Use React Query consistently
+return useQuery({
+  queryKey,
+  queryFn: async () => {
+    const { data, error } = await getUsers({ page, limit, sortBy, search });
+    if (error) throw new Error(error);
+    return data;
+  },
+});
+```
+
+### Query Helper Pattern
+
+```typescript
+// Use helper classes for complex query management
+class CurrentUser {
+  queryKey = ["current-user"];
+  get() {
+    return queryClient.getQueryData(this.queryKey);
+  }
+  update(user) {
+    /* deep merge logic */
+  }
+  reset() {
+    queryClient.setQueryData(this.queryKey, null);
+  }
+}
+```
+
+### Component Composition
+
+```typescript
+// Create flexible, generic components
+export const ReusableForm = <T extends Record<string, any>>({
+  form,
+  inputs,
+  onSubmit,
+}: ReusableFormProps<T>) => {
+  // Handle multiple input types with proper typing
+};
+```
+
+### Server Actions
+
+```typescript
+"use server";
+export const getUsers = async (filter: FilterUsers) => {
+  try {
+    // Drizzle ORM queries with proper error handling
+    const users = await db.select().from(user).where(/* conditions */);
+    return { data: users };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : "Failed to fetch users",
+    };
+  }
+};
+```
+
+## Best Practices
+
+### Performance
+
+- Use React Query for caching and background updates
+- Implement optimistic updates for better UX
+- Use proper memoization with useMemo and useCallback
+- Lazy load components when appropriate
+
+### Accessibility
+
+- Include proper ARIA attributes
+- Use semantic HTML elements
+- Implement keyboard navigation
+- Provide screen reader support
+
+### Security
+
+- Validate all inputs on the server side
+- Use proper authentication and authorization
+- Encrypt sensitive data
+- Follow OWASP security guidelines
+
+### Testing
+
+- Write unit tests for utility functions
+- Test component behavior and user interactions
+- Mock external dependencies properly
+- Maintain good test coverage
+
+## Code Quality Standards
+
+- Write self-documenting code with clear variable names
+- Use consistent formatting with Prettier
+- Follow ESLint rules and fix all warnings
+- Write comprehensive JSDoc comments for complex functions
+- Keep functions small and focused on single responsibility
+- Use meaningful commit messages
+
+## When Writing Code
+
+1. **Think about reusability**: Can this be made into a generic component?
+2. **Consider edge cases**: What happens when data is loading, empty, or errors?
+3. **Plan for accessibility**: Will this work for all users?
+4. **Optimize for performance**: Are there unnecessary re-renders or API calls?
+5. **Maintain type safety**: Does TypeScript catch potential runtime errors?
+6. **Follow established patterns**: Does this match the existing codebase style?
+
+Remember: You're building production-ready SaaS applications that need to be maintainable, scalable, and user-friendly. Every line of code should reflect these principles.
