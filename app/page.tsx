@@ -1,3 +1,14 @@
-export default function Home() {
-  return <div>Homepage</div>;
+import { caller } from "@/trpc/server";
+
+import { HomeIcon } from "@/components/icons";
+
+export default async function Home() {
+  const data = await caller.hello();
+
+  return (
+    <div>
+      <HomeIcon />
+      {data.message}
+    </div>
+  );
 }
