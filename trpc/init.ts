@@ -2,7 +2,12 @@ import { cache } from "react";
 import { headers } from "next/headers";
 import { initTRPC, TRPCError } from "@trpc/server";
 
-export const createTRPCContext = cache(async () => {});
+const createTRPCContextInner = async () => {
+  return {};
+};
+
+export const createTRPCContext = cache(createTRPCContextInner);
+export const createTRPCContextForRoute = createTRPCContextInner;
 
 // Avoid exporting the entire t-object
 // since it's not very descriptive.
@@ -18,7 +23,7 @@ const t = initTRPC.create({
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 
-// Infer the context type from createTRPCContext
-type Context = Awaited<ReturnType<typeof createTRPCContext>>;
+// Infer the context type from createTRPCContextInner
+type Context = Awaited<ReturnType<typeof createTRPCContextInner>>;
 
 export const baseProcedure = t.procedure;
